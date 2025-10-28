@@ -1,50 +1,48 @@
 name: Terraform CI/CD Pipeline
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+    push:
+        branches:
+            - main
+    pull_request:
+        branches:
+            - main
 
 permissions:
-  contents: read
+    contents: read
 
 jobs:
-  terraform:
-    name: Terraform Workflow
-    runs-on: ubuntu-latest
+    terraform:
+        name: Terraform Workflow
+        runs-on: ubuntu-latest
 
-    env:
-      AWS_REGION: ap-south-1
+        env:
+            AWS_REGION: ap-south-1
+            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: 1.8.0
+            - name: Setup Terraform
+              uses: hashicorp/setup-terraform@v3
+              with:
+                  terraform_version: 1.8.0
 
-      - name: Terraform Format
-        run: terraform fmt -check
+            - name: Terraform Format
+              run: terraform fmt -check
 
-      - name: Terraform Init
-        run: terraform init
+            - name: Terraform Init
+              run: terraform init
 
-      - name: Terraform Validate
-        run: terraform validate
+            - name: Terraform Validate
+              run: terraform validate
 
-      - name: Terraform Plan
-        run: terraform plan -input=false
+            - name: Terraform Plan
+              run: terraform plan -input=false
 
-      # Uncomment this block ONLY when you’re confident about auto-deploys
-      # - name: Terraform Apply
-      #   if: github.ref == 'refs/heads/main'
-      #   run: terraform apply -auto-approve -input=false
-
-    env:
-      AWS_ACCESS_KEY_ID: ${{ AKIAYSE4OI44MXUPTJAB }}
-      AWS_SECRET_ACCESS_KEY: ${{ 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 }}
+            # Uncomment this block ONLY when you’re confident about auto-deploys
+            # - name: Terraform Apply
+            #   if: github.ref == 'refs/heads/main'
+            #   run: terraform apply -auto-approve -input=false
