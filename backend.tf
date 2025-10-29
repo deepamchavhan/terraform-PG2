@@ -1,9 +1,11 @@
+
+
 terraform {
   backend "s3" {
-    bucket       = "deepam-terraform-state-bucket-backend" # Must exist before init
-    key          = "rds/mysql/terraform.tfstate"           # Path within the bucket
-    region       = "ap-south-1"
-    use_lockfile = true # Optional: for state locking
-    encrypt      = true
+    bucket         = "deepam-terraform-state-bucket-backend"
+    key            = "rds/mysql/terraform.tfstate"
+    region         = "ap-south-1"
+    encrypt        = true
+    dynamodb_table = "terraform-state-lock-deepam" # handles locking
   }
 }
